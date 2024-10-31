@@ -1,100 +1,150 @@
+import random
 import secrets
+import string
 
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, TemplateView, UpdateView, DeleteView, ListView, DetailView
 
-from my_project.settings import EMAIL_HOST_USER, SERVER_EMAIL
-from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm, ProfilePasswordRestoreForm
+from my_project.settings import EMAIL_HOST_USER
+from users.forms import UserRegisterFrom, UserProfileFrom
 from users.models import User
 
 
-class LoginView(CreateView):
+class UserView(LoginRequiredMixin, ListView):
     model = User
-    form_class = UserLoginForm
-    template_name = "users/user_login.html"
-    success_url = reverse_lazy("mailmanager:client_list")
-    # form_valid method is overridden to perform additional validation checks
-    def form_valid(self, form):
-        if not form.is_valid():
-            return self.render_to_response(self.get_context_data(form=form))
-        return super().form_valid(form)
-    # form_invalid method is overridden to display error messages
-    def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(form=form))
-    # get_context_data method is overridden to add extra context data
+    fields = ['email', 'first_name', 'last_name', 'comment']
+    template_name = 'users/user_list.html'
+    extra_context = {'title': 'Пользователи'}
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = "Авторизация"
         return context
-    # success_url is overridden to redirect to a different page after successful login
-    def get_success_url(self):
-        return "/profile"
-    # logout_view method is overridden to redirect to a different page after successful logout
-    def logout_view(request):
-        from django.contrib.auth import logout
-        logout(request)
-        return redirect("/login")
-    # get_object method is overridden to return the current logged-in user
-    def get_object(self, queryset=None):
-        return self.request.user
 
-def confirm_user(request, code):
-    user = get_object_or_404(User, verification_code=code)
-    user.is_active = True
-    user.save()
-    message = f'Ваша регистрация подтверждена!'
-    send_mail('Регистрация подтверждена',
-              message, from_email=EMAIL_HOST_USER,
-              recipient_list=[user.email] )
-    return redirect(reverse('users:login'))
+
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    fields = ['email', 'first_name', 'last_name', 'comment']
+    template_name = 'users/user_detail.html'
+    success_url = reverse_lazy('users:user_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class UserCreateView(LoginRequiredMixin, CreateView):
+    model = User
+    fields = ['email', 'first_name', 'last_name', 'comment']
+    template_name = 'users/user_from.html'
+    success_url = reverse_lazy('users:user_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Создание пользователя'
+        return context
+
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    fields = ['email', 'first_name', 'last_name', 'comment']
+    template_name = 'users/user_from.html'
+    success_url = reverse_lazy('users:user_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Редактирование пользователя'
+        return context
+
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
+    model = User
+    template_name = 'users/user_delete.html'
+    success_url = reverse_lazy('users:user_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_item = self.get_object()
+        context['title'] = user_item.email
+        return context
+
+
+class UserLogin(LoginView):
+    template_name = 'users/login.html'
+
+
+class UserLogout(LogoutView):
+    pass
 
 
 class RegisterView(CreateView):
     model = User
-    form_class = UserRegisterForm
-    template_name = 'users/user_registration.html'
+    form_class = UserRegisterFrom
+    template_name = 'users/register.html'
     success_url = reverse_lazy('users:login')
 
     def form_valid(self, form):
         user = form.save()
         user.is_active = False
-        token = secrets.token_hex(16)
-        user.verification_code = token
+        user.set_password(user.password)
+        verification_code = secrets.token_hex(16)
+        user.verification_code = verification_code
+        user.save()
         host = self.request.get_host()
-        url = f"http://{host}/users/confirm/{token}/"
-        send_mail("Подтверждение почты", f"Для подтверждения вашей почты перейдите по ссылке ниже!\n{url}",
-                        SERVER_EMAIL, recipient_list=[user.email])
+        url = f'http://{host}/users/email-confirm/{verification_code}'
+        send_mail(
+            subject='Подтверждение почты',
+            message=f'Привет, переди по ссылке для подтверждения почты {url}',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+        )
         user.save()
         return super().form_valid(form)
 
 
-class ProfileView(UpdateView):
+def email_verification(request, verification_code):
+    verification_code = request.POST.get('verification_code')
+    user = get_object_or_404(User, verification_code=verification_code)
+    if user:
+        user.is_active = True
+        user.save()
+        return redirect(reverse("users:login"))
+    else:
+        return redirect(reverse('users:register'))
+
+
+class ResetPassword(TemplateView):
+    def get(self, request):
+        return render(request, 'users/reset.html')
+
+    def post(self, request):
+        mail = request.POST.get('mail')
+        user = get_object_or_404(User, email=mail)
+        letters = list(string.ascii_lowercase)
+        new_password = ''
+        for i in range(8):
+            new_password = new_password + random.choice(letters) + str(random.randint(1, 9))
+            user.set_password(new_password)
+        user.save()
+        message = (f'Ваш новый пароль: {new_password}'
+                   f'Сохраняйте в тайне!')
+        send_mail(
+            subject='Новый пароль',
+            message=message,
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[user.email]
+        )
+        return redirect('users:login')
+
+
+class ProfileView(LoginRequiredMixin, UpdateView):
     model = User
-    form_class = UserProfileForm
-    success_url = reverse_lazy("mailmanager:profile")
+    form_class = UserProfileFrom
+    success_url = reverse_lazy('users:profile')
 
     def get_object(self, queryset=None):
         return self.request.user
-
-
-class ProfilePasswordRestoreView(CreateView):
-    model = User
-    form_class = ProfilePasswordRestoreForm
-    template_name = 'users/restore_password.html'
-    success_url = reverse_lazy('users:login')
-
-    def form_valid(self, form):
-        email = form.cleaned_data['email']
-        user = get_object_or_404(User, email=email)
-        password = User.objects.make_random_password()
-        user.set_password(password)
-        user.save(update_fields=['password'])
-
-        send_mail("Новый пароль",
-                  f"Ваш новый пароль!\n{password}",
-                  from_email=EMAIL_HOST_USER,
-                  recipient_list=[user.email])
-
-        return redirect(self.success_url)

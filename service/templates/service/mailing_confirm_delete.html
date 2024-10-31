@@ -14,13 +14,13 @@
                                 <div class="card-body">
                                     <form method="post" enctype="multipart/form-data">
                                         {% csrf_token %}
-                                        <p> Хотите удалить запись? </p>
+                                        <p> Хотите удалить запись или нет? </p>
                                         <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
                                             Подтвердить
                                         </button>
                                     </form>
                                     <a href="{% url 'service:client_list' %}"
-                                       class="btn btn-lg btn-block btn-outline-primary">Отмена</a>
+                                       class="btn btn-lg btn-block btn-outline-primary">Отменить</a>
                                 </div>
                             </div>
                         </div>

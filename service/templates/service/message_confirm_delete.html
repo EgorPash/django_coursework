@@ -14,7 +14,7 @@
                                 <div class="card-body">
                                     <form method="post" enctype="multipart/form-data">
                                         {% csrf_token %}
-                                        <p> Хотите удалить запись "{{ object.subject }}"? </p>
+                                        <p> Хотите удалить запись "{{ object.subject }}" или нет? </p>
                                         <button type="submit" class="btn btn-lg btn-block btn-warning">
                                             Подтвердить
                                         </button>

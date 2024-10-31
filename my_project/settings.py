@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
-
 from django.urls import reverse_lazy
 from dotenv import load_dotenv
 load_dotenv()
@@ -27,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', False) == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -41,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mailmanager',
+    'django_apscheduler',
+    'service',
     'blog',
     'users',
 ]
@@ -84,9 +84,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         "NAME": os.getenv('NAME'),
-        "USER": os.getenv('USER_DB'),
+        "USER": os.getenv('USER'),
         "PASSWORD": os.getenv('PASSWORD'),
-        "HOST": os.getenv('HOST'),
         "PORT": os.getenv('PORT'),
     }
 }
@@ -147,11 +146,9 @@ NULLABLE = {'blank': True, 'null': True}
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
 LOGIN_URL = reverse_lazy('users:login')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')

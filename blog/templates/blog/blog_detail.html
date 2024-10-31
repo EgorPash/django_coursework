@@ -1,39 +1,33 @@
-{% extends 'mailmanager/base.html' %}
-{% block content %}
-<div class="row text-center">
-    <div class="col-12">
-        <div class="card mb-4 box-shadow">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col">
-                        <h4 class="my-0 font-weight-normal">Наименование статьи: {{ object.title }}</h4>
+{% extends 'blog/blog_list.html' %}
+{% load my_tags %}
+<!--Подключаем файл my_tags, чтобы можно было выводить фото -->
+{% block content%}
+<!--Шаблон для вывода товара по одному-->
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="{{ blog.picture|my_media }}">
+                    <div class="card-body">
+                        <p class="card-text">Заголовок: {{ blog.title }}</p>
+                        <p class="card-text">Текст записи: {{ blog.content }}</p>
+                        <p class="card-text">Дата записи: {{ blog.date_of_publication }}</p>
+                        <p class="card-text">Опубликовано: {{ blog.is_active }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a class="btn btn-primary" href="{% url 'blog:blog_list' %}"
+                                   role="button">Назад</a>
+                            </div>
+                            <small class="text-body-secondary">Инкогнито </small>
+                        </div>
+                        <div class="card-footer">
+                            Просмотров: {{ blog.number_of_views }}
+                        </div>
                     </div>
-
-                </div>
-            </div>
-            <div class="card-body">
-                <p class="mt-3 mb-4 text-start m-3"> Статья создана: {{ object.created_at }}</p>
-                <p class="mt-3 mb-4 text-start m-3">Содержание статьи: {{ object.content }}</p>
-                <p class="mt-3 mb-4 text-start m-3">Количество просмотров: {{ object.views_count }}</p>
-                {% if user.is_authenticated and user == object.owner or user.is_superuser %}
-                <div class="btn-group">
-                    <a type="button" class="btn btn-outline-primary"
-                       href="{% url 'blog:blog_update' object.pk %}">
-                        Редактировать
-                    </a>
-                    <a type="button" class="btn btn-outline-danger"
-                       href="{% url 'blog:blog_delete' object.pk %}">
-                        Удалить
-                    </a>
-                </div>
-                {% endif %}
-                <div class="card-footer text-body-secondary mt-5">
-                    <a href="{% url 'blog:blog_list' %}">Вернуться к списку статей</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-{% endblock %}
+{% endblock%}
