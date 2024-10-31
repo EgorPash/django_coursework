@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="15e1f9b8-7d95-4010-b766-b9dd2a20f2b2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.env.template" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blog/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blog/templates/blog/blog_confirm_delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blog/templates/blog/blog_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blog/templates/blog/blog_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blog/templates/blog/blog_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blog/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/management/commands/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/services.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/client_confirm_delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/client_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/client_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/client_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/includes/footer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/includes/header.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/letter_confirm_delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/letter_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/letter_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/letter_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/message_confirm_delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/message_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/message_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/message_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/templates/mailmanager/sendattempt_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mailmanager/views_services.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/management/commands/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/templates/users/restore_password.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/templates/users/user_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/templates/users/user_login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/templates/users/user_registration.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/users/urls.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2oAKkIHUyh8SSvOYWCKjh6Opz5y" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-0e3be3396995-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23339.19" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="15e1f9b8-7d95-4010-b766-b9dd2a20f2b2" name="Changes" comment="" />
+      <created>1730307081964</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1730307081964</updated>
+    </task>
+    <servers />
+  </component>
+</project>
