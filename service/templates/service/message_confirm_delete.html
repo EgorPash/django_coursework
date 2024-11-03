@@ -12,23 +12,22 @@
                         <div class="col-8">
                             <div class="card">
                                 <div class="card-body">
-                                    <form method="post" enctype="multipart/form-data">
+                                    <h5 class="card-title">Вы уверены, что хотите удалить статью?</h5>
+                                    <form enctype="multipart/form-data" method="post">
                                         {% csrf_token %}
-                                        <p> Хотите удалить запись "{{ object.subject }}" или нет? </p>
-                                        <button type="submit" class="btn btn-lg btn-block btn-warning">
-                                            Подтвердить
-                                        </button>
-
+                                        {{ form.as_p }}
+                                        <button class="btn btn-primary" type="submit">Удалить</button>
                                     </form>
-                                    <a href="{% url 'service:message_list' %}"
-                                       class="btn btn-lg btn-block btn-warning">Отмена</a>
                                 </div>
+                                <a class="btn btn-lg btn-block btn-warning"
+                                   href="{% url 'service:message_list' %}">Отмена</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </main>
 

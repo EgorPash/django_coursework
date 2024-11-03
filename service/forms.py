@@ -28,7 +28,7 @@ class ClientModeratorForm(StyleFormMixin, ModelForm):
 class MessageForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Message
-        exclude = ("picture",)
+        exclude = ("pictures", "owner")
 
 
 class MessageModeratorForm(StyleFormMixin, ModelForm):
@@ -40,7 +40,7 @@ class MessageModeratorForm(StyleFormMixin, ModelForm):
 class MailingForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Mailing
-        exclude = ("message",)
+        exclude = ("message", "owner")
 
 
 class MailingModeratorForm(StyleFormMixin, ModelForm):

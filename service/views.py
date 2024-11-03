@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
-class ClientListView(LoginRequiredMixin, ListView):
+class ClientListView(ListView):
     model = Client
     fields = ['email', 'first_name', 'last_name']
     template_name = 'service/client_list.html'
@@ -25,7 +25,7 @@ class ClientListView(LoginRequiredMixin, ListView):
         return Client.objects.filter(owner=self.request.user)
 
 
-class ClientDetailView(LoginRequiredMixin, DetailView):
+class ClientDetailView(DetailView):
     model = Client
     fields = ['email', 'first_name', 'last_name']
     template_name = 'service/client_detail.html'
@@ -38,9 +38,9 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ClientCreateView(LoginRequiredMixin, CreateView):
+class ClientCreateView(CreateView):
     model = Client
-    fields = ['email', 'first_name', 'last_name']
+    form_class = ClientForm
     template_name = 'service/client_form.html'
     success_url = reverse_lazy('service:client_list')
 
@@ -60,9 +60,9 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
         return Client.objects.all()
 
 
-class ClientUpdateView(LoginRequiredMixin, UpdateView):
+class ClientUpdateView(UpdateView):
     model = Client
-    fields = ['email', 'first_name', 'last_name']
+    form_class = ClientForm
     template_name = 'service/client_form.html'
     success_url = reverse_lazy('service:client_list')
 
@@ -73,20 +73,20 @@ class ClientUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
 
-class ClientDeleteView(LoginRequiredMixin, DeleteView):
+class ClientDeleteView(DeleteView):
     model = Client
-    fields = ['email', 'first_name', 'last_name', 'comment']
+ #   form_class = ClientForm
     template_name = 'service/client_confirm_delete.html'
     success_url = reverse_lazy('service:client_list')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        client_item = self.get_object()
-        context['title'] = client_item.first_name
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     client_item = self.get_object()
+    #     context['title'] = client_item.first_name
+    #     return context
 
 
-class MessageListView(LoginRequiredMixin, ListView):
+class MessageListView(ListView):
     model = Message
     fields = ['subject', 'text', 'picture']
     template_name = 'service/message_list.html'
@@ -100,7 +100,7 @@ class MessageListView(LoginRequiredMixin, ListView):
         return Message.objects.filter(owner=self.request.user)
 
 
-class MessageDetailView(LoginRequiredMixin, DetailView):
+class MessageDetailView(DetailView):
     model = Message
     fields = ['subject', 'text', 'picture']
     template_name = 'service/message_detail.html'
@@ -113,9 +113,9 @@ class MessageDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class MessageCreateView(LoginRequiredMixin, CreateView):
+class MessageCreateView(CreateView):
     model = Message
-    fields = ['subject', 'text', 'picture']
+    form_class = MessageForm
     template_name = 'service/message_form.html'
     success_url = reverse_lazy('service:message_list')
 
@@ -132,41 +132,38 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class MessageUpdateView(LoginRequiredMixin, UpdateView):
+class MessageUpdateView(UpdateView):
     model = Message
-    fields = ['subject', 'text', 'picture']
-    template_name = 'service/message_form.html'
+    form_class = MessageForm
+ #   template_name = 'service/message_form.html'
     success_url = reverse_lazy('service:message_list')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        message_item = self.get_object()
-        context['title'] = message_item.subject
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     message_item = self.get_object()
+    #     context['title'] = message_item.subject
+    #     return context
 
-    def get_form_class(self):
-        user = self.request.user
-        if user == self.object.owner:
-            return MessageForm
-        if user.groups.filter(name='Manager').exists():
-            return MessageModeratorForm
-        raise PermissionDenied
+    # def get_form_class(self):
+    #     user = self.request.user
+    #     if user.groups.filter(name='Manager').exists():
+    #         return MessageModeratorForm
+    #     raise PermissionDenied
 
 
-class MessageDeleteView(LoginRequiredMixin, DeleteView):
+class MessageDeleteView(DeleteView):
     model = Message
-    fields = ['subject', 'text', 'picture']
-    template_name = 'service/message_confirm_delete.html'
+#    template_name = 'service/message_confirm_delete.html'
     success_url = reverse_lazy('service:message_list')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        message_item = self.get_object()
-        context['title'] = message_item.subject
-        return context
+   # def get_context_data(self, **kwargs):
+      #  context = super().get_context_data(**kwargs)
+      #  message_item = self.get_object()
+       # context['title'] = message_item.subject
+       # return context
 
 
-class MailingView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class MailingView(ListView):
     model = Mailing
     fields = ['time_sending', 'time_end', 'periodicity', 'status', 'clients']
     template_name = 'service/mailing_list.html'
@@ -181,7 +178,7 @@ class MailingView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return Mailing.objects.filter(owner=self.request.user)
 
 
-class MailingDetailView(LoginRequiredMixin, DetailView):
+class MailingDetailView(DetailView):
     model = Mailing
     fields = ['time_sending', 'time_end', 'periodicity', 'status', 'clients']
     template_name = 'service/mailing_detail.html'
@@ -194,9 +191,9 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class MailingCreateView(CreateView):
     model = Mailing
-    fields = ['time_sending', 'time_end', 'periodicity', 'status', 'clients']
+    form_class = MailingForm
     template_name = 'service/mailing_form.html'
     success_url = reverse_lazy('service:mailing_list')
     permission_required = 'service.add_maling'
@@ -217,49 +214,49 @@ class MailingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         return Mailing.objects.all()
 
 
-class MailingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class MailingUpdateView(UpdateView):
     model = Mailing
-    fields = ['time_sending', 'time_end', 'periodicity', 'status', 'clients']
-    template_name = 'service/mailing_form.html'
-    permission_required = 'service.change_maling'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        mailing_item = self.get_object()
-        context['title'] = mailing_item.time_sending
-        return context
-
-    def get_form_class(self):
-        user = self.request.user
-        if user == self.object.owner:
-            return MailingForm
-        if user.groups.filter(name='Manager').exists():
-            return MailingModeratorForm
-        raise PermissionDenied
-
-
-class MailingDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
-    model = Mailing
-    fields = ['time_sending', 'time_end', 'periodicity', 'status', 'clients']
-    template_name = 'service/mailing_confirm_delete.html'
+    form_class = MailingForm
+   # template_name = 'service/mailing_form.html'
     success_url = reverse_lazy('service:mailing_list')
-    permission_required = 'service.delete_maling'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        mailing_item = self.get_object()
-        context['title'] = mailing_item.time_sending
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     mailing_item = self.get_object()
+    #     context['title'] = mailing_item.time_sending
+    #     return context
+
+    # def get_form_class(self):
+    #     user = self.request.user
+    #     if user == self.object.owner:
+    #         return MailingForm
+    #     if user.groups.filter(name='Manager').exists():
+    #         return MailingModeratorForm
+    #     raise PermissionDenied
 
 
-class AttemptView(LoginRequiredMixin, ListView):
+class MailingDeleteView(DeleteView):
+    model = Mailing
+   # form_class = MailingForm
+   # template_name = 'service/mailing_confirm_delete.html'
+    success_url = reverse_lazy('service:mailing_list')
+  #  permission_required = 'service.delete_maling'
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     mailing_item = self.get_object()
+    #     context['title'] = mailing_item.time_sending
+    #     return context
+
+
+class AttemptView(ListView):
     model = Attempt
     fields = ['status']
     template_name = 'service/attempt_list.html'
     extra_context = {'title': 'Попытки'}
 
 
-class ContactsView(LoginRequiredMixin, ListView):
+class ContactsView(ListView):
     model = Contacts
     fields = ['name', 'phone', 'email']
     extra_context = {'title': 'Контакты'}
