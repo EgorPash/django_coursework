@@ -11,23 +11,21 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 class ClientListView(ListView):
     model = Client
-    fields = ['email', 'first_name', 'last_name']
-    template_name = 'service/client_list.html'
-    extra_context = {'title': 'Клиенты'}
+    # template_name = 'service/client_list.html'
+    # extra_context = {'title': 'Клиенты'}
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     return context
 
     success_url = reverse_lazy('service:client_list')
 
-    def get_queryset(self):
-        return Client.objects.filter(owner=self.request.user)
+    # def get_queryset(self):
+    #     return Client.objects.filter(owner=self.request.user)
 
 
 class ClientDetailView(DetailView):
     model = Client
-    fields = ['email', 'first_name', 'last_name']
     template_name = 'service/client_detail.html'
     success_url = reverse_lazy('service:client_list')
 
@@ -88,21 +86,21 @@ class ClientDeleteView(DeleteView):
 
 class MessageListView(ListView):
     model = Message
-    fields = ['subject', 'text', 'picture']
-    template_name = 'service/message_list.html'
-    extra_context = {'title': 'Напишите сообщение'}
+    # template_name = 'service/message_list.html'
+    # extra_context = {'title': 'Напишите сообщение'}
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     return context
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    success_url = reverse_lazy('service:message_list')
 
-    def get_queryset(self):
-        return Message.objects.filter(owner=self.request.user)
+    # def get_queryset(self):
+    #     return Message.objects.filter(owner=self.request.user)
 
 
 class MessageDetailView(DetailView):
     model = Message
-    fields = ['subject', 'text', 'picture']
     template_name = 'service/message_detail.html'
     success_url = reverse_lazy('service:message_list')
 
@@ -165,22 +163,22 @@ class MessageDeleteView(DeleteView):
 
 class MailingView(ListView):
     model = Mailing
-    fields = ['time_sending', 'time_end', 'periodicity', 'status', 'clients']
-    template_name = 'service/mailing_list.html'
-    extra_context = {'title': 'Рассылка'}
-    permission_required = 'service.view_maling'
+    # template_name = 'service/mailing_list.html'
+    # extra_context = {'title': 'Рассылка'}
+    # permission_required = 'service.view_maling'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    success_url = reverse_lazy('service:mailing_list')
 
-    def get_queryset(self):
-        return Mailing.objects.filter(owner=self.request.user)
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     return context
+    #
+    # def get_queryset(self):
+    #     return Mailing.objects.filter(owner=self.request.user)
 
 
 class MailingDetailView(DetailView):
     model = Mailing
-    fields = ['time_sending', 'time_end', 'periodicity', 'status', 'clients']
     template_name = 'service/mailing_detail.html'
     success_url = reverse_lazy('service:mailing_form')
 
@@ -251,13 +249,11 @@ class MailingDeleteView(DeleteView):
 
 class AttemptView(ListView):
     model = Attempt
-    fields = ['status']
     template_name = 'service/attempt_list.html'
     extra_context = {'title': 'Попытки'}
 
 
 class ContactsView(ListView):
     model = Contacts
-    fields = ['name', 'phone', 'email']
     extra_context = {'title': 'Контакты'}
     template_name = 'service/contact_list.html'

@@ -1,5 +1,6 @@
 {% extends 'service/base.html' %}
 {% block content %}
+{% if user.is_authenticated %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Сообщения</h1>
     <p class="lead">{{ title }}</p>
@@ -45,4 +46,11 @@
         </div>
     </div>
 </form>
+{% else %}
+<div class="container">
+        <div class="col-12">
+            <h3> Для просмотра сообщений вам необходимо авторизоваться.</h3>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}

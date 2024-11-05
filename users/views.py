@@ -17,7 +17,6 @@ from users.models import User
 
 class UserView(LoginRequiredMixin, ListView):
     model = User
-    fields = ['email', 'first_name', 'last_name', 'comment']
     template_name = 'users/user_list.html'
     extra_context = {'title': 'Пользователи'}
 
@@ -28,7 +27,6 @@ class UserView(LoginRequiredMixin, ListView):
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
-    fields = ['email', 'first_name', 'last_name', 'comment']
     template_name = 'users/user_detail.html'
     success_url = reverse_lazy('users:user_list')
 
