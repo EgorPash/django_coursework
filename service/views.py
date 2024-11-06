@@ -1,7 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory, ModelForm
+from django.shortcuts import render
 
+from blog.models import Blog
+from blog.utils import get_cache_mailing_active, get_mailing_count_from_cache, get_cache_unique_quantity
 from service.forms import MailingModeratorForm, MessageModeratorForm, MessageForm, MailingForm, ClientForm, \
     StyleFormMixin
 from service.models import Client, Message, Mailing, Attempt, Contacts
@@ -114,7 +117,7 @@ class MessageDetailView(DetailView):
 class MessageCreateView(CreateView):
     model = Message
     form_class = MessageForm
-    template_name = 'service/message_form.html'
+    # template_name = 'service/message_form.html'
     success_url = reverse_lazy('service:message_list')
 
     def get_context_data(self, **kwargs):
@@ -257,3 +260,18 @@ class ContactsView(ListView):
     model = Contacts
     extra_context = {'title': 'Контакты'}
     template_name = 'service/contact_list.html'
+
+
+class IndexPage(ListView):
+    model = Blog
+    template_name = 'service/index.html'
+   # extra_context = {'title': 'Блог'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mailing_quantity_active'] = get_cache_mailing_active()
+        context['mailing_quantity'] = get_mailing_count_from_cache()
+        context['clients_unique_quantity'] = get_cache_unique_quantity()
+        context['records'] = Blog.objects.order_by('?')[:3]
+        return context
+

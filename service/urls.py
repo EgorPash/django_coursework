@@ -5,12 +5,14 @@ from service.apps import ServiceConfig
 from service.views import (ClientListView, ClientDetailView, ClientCreateView, ClientUpdateView,
                            ClientDeleteView, MessageListView, MessageDetailView, MessageCreateView, MessageUpdateView,
                            MessageDeleteView, ContactsView,
-                           MailingView, MailingDetailView, MailingCreateView, MailingUpdateView, MailingDeleteView)
+                           MailingView, MailingDetailView, MailingCreateView, MailingUpdateView, MailingDeleteView,
+                           IndexPage, AttemptView)
 app_name = ServiceConfig.name
 
 
 urlpatterns = [
-    path('', BlogListView.as_view(), name='blog_list'),
+    path('', IndexPage.as_view(), name='index'),
+    path('attempt/', AttemptView.as_view(), name='attempt_list'),
     path('client/', ClientListView.as_view(), name='client_list'),
     path('contacts/', ContactsView.as_view(), name="contact_list"),
     path('client/<int:pk>/', ClientDetailView.as_view(), name='client_detail'),

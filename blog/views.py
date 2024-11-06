@@ -18,7 +18,7 @@ class BlogListView(ListView):
         context['mailing_quantity_active'] = get_cache_mailing_active()
         context['mailing_quantity'] = get_mailing_count_from_cache()
         context['clients_unique_quantity'] = get_cache_unique_quantity()
-        context['records'] = Blog.objects.order_by('?')[:3]
+        context['records'] = Blog.objects.order_by('?')
         return context
 
 
